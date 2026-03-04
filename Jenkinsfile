@@ -1,30 +1,44 @@
 pipeline {
     agent any
 
+    environment {
+        REGISTRY = "trialm1bhcd.jfrog.io/docker-local"
+    }
+
     stages {
 
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/your-repo.git'
+                git branch: 'main', url: 'https://github.com/Namratha757/jenkins-cicd-demo.git'
             }
         }
 
-        stage('Build Backend Image') {
+        stage('Build Images') {
             steps {
-                sh 'docker build -t your-docker-username/backend:v1.0 ./backend'
+                sh 'docker build -t backend:v1.0 ./backend'
+                sh 'docker build -t frontend:v1.0 ./frontend'
             }
         }
 
-        stage('Build Frontend Image') {
+        stage('Tag Images') {
             steps {
-                sh 'docker build -t your-docker-username/frontend:v1.0 ./frontend'
+                sh "docker tag backend:v1.0 ${REGISTRY}/backend:v1.0"
+                sh "docker tag frontend:v1.0 ${REGISTRY}/frontend:v1.0"
+            }
+        }
+
+        stage('Docker Login') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'jfrog-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh 'echo $PASS | docker login trialm1bhcd.jfrog.io -u $USER --password-stdin'
+                }
             }
         }
 
         stage('Push to JFrog') {
             steps {
-                sh 'docker push your-jfrog-repo/backend:v1.0'
-                sh 'docker push your-jfrog-repo/frontend:v1.0'
+                sh "docker push ${REGISTRY}/backend:v1.0"
+                sh "docker push ${REGISTRY}/frontend:v1.0"
             }
         }
 
