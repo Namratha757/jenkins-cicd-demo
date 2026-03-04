@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple DevOps App</title>
+</head>
+<body>
+    <h1>Frontend</h1>
+    <button onclick="getData()">Call Backend</button>
+    <p id="result"></p>
+
+    <script>
+        function getData() {
+            fetch("http://backend-service:5000/api")
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("result").innerText = data.message;
+                });
+        }
+    </script>
+</body>
+</html>
