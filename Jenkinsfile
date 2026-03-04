@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+options {
+    skipDefaultCheckout(true)
+}
     environment {
         REGISTRY = "trialm1bhcd.jfrog.io/docker-local"
     }
