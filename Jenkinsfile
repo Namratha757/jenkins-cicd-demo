@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        REGISTRY = "trialm1bhcd.jfrog.io/docker-local"
+        REGISTRY = "trialm1bhcd.jfrog.io/docker-trial"
     }
 
     stages {
