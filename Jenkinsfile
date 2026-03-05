@@ -1,20 +1,11 @@
 pipeline {
     agent any
-options {
-    skipDefaultCheckout(true)
-}
+    
     environment {
         REGISTRY = "trialm1bhcd.jfrog.io/docker-local"
     }
 
     stages {
-
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/Namratha757/jenkins-cicd-demo.git'
-            }
-        }
-
         stage('Build Images') {
             steps {
                 sh 'docker build -t backend:v1.0 ./backend'
