@@ -1,11 +1,24 @@
 pipeline {
     agent any
     
+    options {
+        // This stops Jenkins from trying to do the broken automatic checkout
+        skipDefaultCheckout()
+    }
+
     environment {
         REGISTRY = "trialm1bhcd.jfrog.io/docker-local"
     }
 
     stages {
+        stage('Clean Checkout') {
+            steps {
+                // Manually clean and clone the repo
+                deleteDir() 
+                checkout scm
+            }
+        }
+
         stage('Build Images') {
             steps {
                 sh 'docker build -t backend:v1.0 ./backend'
